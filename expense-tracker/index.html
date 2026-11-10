@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Expense Tracker — Пробный просмотр</title>
+    <!-- Modern typography & Chart.js -->
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="app-layout">
+        <!-- Desktop Sidebar Navigation -->
+        <aside class="sidebar">
+            <div class="brand">
+                <div class="brand-text">
+                    <h2>FinTrack</h2>
+                    <span class="demo-tag">(Пробный просмотр)</span>
+                </div>
+            </div>
+
+            <nav class="nav-menu">
+                <a href="#" class="nav-item" data-tab="dashboard">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+                    <span>Главная</span>
+                </a>
+                <a href="#" class="nav-item active" data-tab="report">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>
+                    <span>Отчеты</span>
+                </a>
+                <a href="#" class="nav-item" data-tab="transactions">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="5" width="20" height="14" rx="2"/><line x1="2" y1="10" x2="22" y2="10"/></svg>
+                    <span>Транзакции</span>
+                </a>
+                <a href="#" class="nav-item" data-tab="budgets">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 5H5a2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2z"/><path d="M16 11a1 1 0 1 0 0 2 1 1 0 0 0 0-2z"/></svg>
+                    <span>Бюджет</span>
+                </a>
+            </nav>
+
+            <div class="user-profile">
+                <div class="avatar">АА</div>
+                <div class="user-details">
+                    <span class="user-name">Аскаров А.</span>
+                    <span class="user-role">Демо-пользователь</span>
+                </div>
+            </div>
+        </aside>
+
+        <!-- Main Desktop Content Area -->
+        <main class="main-wrapper">
+            <!-- Header Bar -->
+            <header class="top-bar">
+                <div class="page-title">
+                    <h1>Отчет расходов <span class="subtitle-tag">(Пробный просмотр)</span></h1>
+                </div>
+
+                <div class="top-controls">
+                    <div class="month-dropdown">
+                        <select id="month-select">
+                            <option value="2026-11">Ноябрь 2026</option>
+                            <option value="2026-10">Октябрь 2026</option>
+                            <option value="2026-09">Сентябрь 2026</option>
+                        </select>
+                    </div>
+                    <button class="add-btn" id="open-tx-modal">
+                        <span>+</span> Новая транзакция
+                    </button>
+                </div>
+            </header>
+
+            <!-- Main Content Container -->
+            <div class="content-body">
+
+                <!-- TAB: REPORT -->
+                <section class="tab-pane active" id="pane-report">
+                    
+                    <!-- Segmented Control Switcher -->
+                    <div class="segmented-control-container">
+                        <div class="segmented-control">
+                            <button class="segment-btn active" id="btn-show-expenses">Расходы</button>
+                            <button class="segment-btn" id="btn-show-income">Доходы</button>
+                        </div>
+                    </div>
+
+                    <!-- Main Dashboard Grid -->
+                    <div class="desktop-grid">
+                        
+                        <!-- Left Column: Donut Chart -->
+                        <div class="card chart-card">
+                            <div class="card-header">
+                                <span class="card-title">Структура расходов</span>
+                            </div>
+                            
+                            <div class="chart-container-wrapper">
+                                <div class="chart-center-info">
+                                    <span class="chart-label">Всего расходов</span>
+                                    <span class="chart-amount" id="donut-total">$23,470.35</span>
+                                </div>
+                                <canvas id="expensesDonutChart"></canvas>
+                            </div>
+                        </div>
+
+                        <!-- Right Column: Category Breakdown Cards -->
+                        <div class="card details-card">
+                            <div class="details-header">
+                                <h3>Все расходы <span class="demo-sub">(Пробный просмотр)</span></h3>
+                                <span class="details-total-badge" id="details-total-text">Всего $23,470.35</span>
+                            </div>
+
+                            <div class="category-list" id="category-list-container">
+                                <!-- Generated dynamically without icons -->
+                            </div>
+                        </div>
+
+                    </div>
+                </section>
+
+                <!-- TAB: TRANSACTIONS LIST -->
+                <section class="tab-pane" id="pane-transactions">
+                    <div class="card">
+                        <div class="card-header">
+                            <span class="card-title">Все операции (Пробный режим)</span>
+                        </div>
+                        <table class="custom-table">
+                            <thead>
+                                <tr>
+                                    <th>Дата</th>
+                                    <th>Тип</th>
+                                    <th>Категория</th>
+                                    <th>Описание</th>
+                                    <th>Сумма</th>
+                                    <th>Статус</th>
+                                </tr>
+                            </thead>
+                            <tbody id="full-tx-tbody">
+                                <!-- Populated dynamically -->
+                            </tbody>
+                        </table>
+                    </div>
+                </section>
+
+                <!-- TAB: BUDGETS -->
+                <section class="tab-pane" id="pane-budgets">
+                    <div class="card">
+                        <div class="card-header">
+                            <span class="card-title">Месячные лимиты (Пробный просмотр)</span>
+                            <button class="add-btn-secondary" id="open-budget-modal">+ Задать лимит</button>
+                        </div>
+                        <div class="budgets-grid" id="budgets-grid-container">
+                            <!-- Populated dynamically -->
+                        </div>
+                    </div>
+                </section>
+
+            </div>
+        </main>
+    </div>
+
+    <!-- Modal: Add Transaction -->
+    <div class="modal-overlay" id="tx-modal">
+        <div class="modal-window">
+            <div class="modal-header">
+                <h3>Добавить транзакцию <span class="demo-tag">(Пробный просмотр)</span></h3>
+                <button class="close-btn" data-modal="tx-modal">&times;</button>
+            </div>
+            <form id="tx-form">
+                <div class="input-group">
+                    <label>Тип операции</label>
+                    <select id="tx-type">
+                        <option value="expense">Расход</option>
+                        <option value="income">Доход</option>
+                    </select>
+                </div>
+                <div class="input-group">
+                    <label>Категория</label>
+                    <select id="tx-category">
+                        <option value="Groceries">Groceries</option>
+                        <option value="Clothing & Shoes">Clothing & Shoes</option>
+                        <option value="Transport">Transport</option>
+                        <option value="Entertainment">Entertainment</option>
+                    </select>
+                </div>
+                <div class="input-group">
+                    <label>Сумма ($)</label>
+                    <input type="number" id="tx-amount" step="0.01" required placeholder="125.00">
+                </div>
+                <div class="input-group">
+                    <label>Описание</label>
+                    <input type="text" id="tx-desc" placeholder="Описание транзакции">
+                </div>
+                <button type="submit" class="submit-btn">Сохранить запись</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Modal: Set Budget -->
+    <div class="modal-overlay" id="budget-modal">
+        <div class="modal-window">
+            <div class="modal-header">
+                <h3>Установить лимит <span class="demo-tag">(Пробный просмотр)</span></h3>
+                <button class="close-btn" data-modal="budget-modal">&times;</button>
+            </div>
+            <form id="budget-form">
+                <div class="input-group">
+                    <label>Категория</label>
+                    <input type="text" id="budget-category" required placeholder="Категория">
+                </div>
+                <div class="input-group">
+                    <label>Лимит ($)</label>
+                    <input type="number" id="budget-amount" step="0.01" required placeholder="5000.00">
+                </div>
+                <button type="submit" class="submit-btn">Установить лимит</button>
+            </form>
+        </div>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>
